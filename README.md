@@ -7,7 +7,7 @@ The currently included sources and readme are for LIL 20211019 which was the lat
 
 I tested it on an ESP32 and it ran perfectly without errors (that is, any segfaults or such. If I write bad code, it tells me so.)
 
-All that's implemented right now is standard output (by way of `Serial`), file IO (by way of an SD card) and error reporting (also through `Serial`).
+All that's implemented right now is standard output (by way of `Serial`), file IO (by way of an SD card) and error reporting (also through `Serial`), as well as a few basic helper functions.
 More functionality is forthcoming.
 
 [LIL]: http://runtimeterror.com/tech/lil/
