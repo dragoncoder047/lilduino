@@ -18,6 +18,28 @@ lil_t lil;
 
 int SD_FAILED_ERR_BLINK[3] = {0x000040, 0x400000, 0x000000};
 
+const char* bootstrap_code = R"===(
+func repl {} {
+    while 1 {
+        set aaaaaaaa [input "> "]
+        print $aaaaaaaa
+        if [streq $aaaaaaaa done] {return}
+        try {
+            print [upeval $aaaaaaaa]
+        } {
+            print Error: [reflect error]
+        }
+    }
+}
+try {
+    source /main.lil
+} {
+    print Error running /main.lil: [reflect error]
+}
+repl
+)===";
+
+
 void setup() {
     // Clear any previous status LED
     status_led(0);
@@ -35,8 +57,8 @@ void setup() {
     lilduino_helpers_init(lil);
 
     // Run main file
-    Serial.println("LIL initialized... running main.lil");
-    lil_run(lil, "source /main.lil");
+    Serial.println("LIL initialized...");
+    lil_run(lil, (char*)bootstrap_code);
 
     // Clean up
     Serial.println("lil_run() returned, cleaning up");

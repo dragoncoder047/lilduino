@@ -1,5 +1,10 @@
 {
     "cSpell.words": [
         "lilduino"
-    ]
+    ],
+    "files.associations": {
+        "*.tmpl": "jinja-html",
+        "*.html": "html",
+        "random": "cpp"
+    }
 }

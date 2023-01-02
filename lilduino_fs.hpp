@@ -14,19 +14,19 @@ void output_cb(lil_t lil, const char* string) {
 }
 
 void error_cb(lil_t lil, size_t pos, const char* msg) {
-    Serial.printf("\nError at pos %u: %s\n", pos, msg);
+    Serial.printf("\nUnhandled error at pos %u: %s\n", pos, msg);
 }
 
 char* readfile_cb(lil_t lil, const char* filename) {
     File f = SD.open(filename, FILE_READ);
     if (!f) {
         LIL_FAILED(lil, "File %s not found", filename);
-        return NULL;
+        return strdup("");
     }
     String s = f.readStringUntil('\0');
     unsigned int sz = s.length();
     char* buf = (char*)malloc(sz + 1);
-    s.toCharArray(buf, sz);
+    s.toCharArray(buf, sz + 1);
     return buf;
 }
 
