@@ -25,7 +25,7 @@ lil_value_t fnc_wifi_connect(lil_t lil, int argc, lil_value_t* argv) {
     const char* ssid = lil_to_string(argv[0]);
     const char* pass = lil_to_string(argv[1]);
     int timeout = 10000;
-    if (argc == 3) timeout = 1000 * lil_to_integer(argv[3]);
+    if (argc == 3) timeout = 1000 * (int)lil_to_integer(argv[3]);
     WiFi.begin(ssid, pass);
     unsigned long now = millis();
     return lil_alloc_integer(WiFi.waitForConnectResult() == WL_CONNECTED ? 1 : 0);
