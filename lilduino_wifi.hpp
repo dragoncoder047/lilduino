@@ -1,7 +1,5 @@
-// Dependency: https://github.com/nickgammon/Regexp
-
-#ifndef LILDUINO_REGEXP_FILE
-#define LILDUINO_REGEXP_FILE
+#ifndef LILDUINO_WIFI_FILE
+#define LILDUINO_WIFI_FILE
 
 #include <Arduino.h>
 #include <WiFi.h>
