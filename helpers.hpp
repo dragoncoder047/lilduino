@@ -75,12 +75,18 @@ lil_value_t fnc_wait(lil_t lil, int argc, lil_value_t* argv) {
 }
 
 lil_value_t fnc_status(lil_t lil, int argc, lil_value_t* argv) {
-    LIL_FIXARITY(lil, "status", argc, 3);
+    LIL_CHECKARGS(lil, "status", argc, 1, 3);
+    if (argc == 2) {
+        LIL_FAILED(lil, "Can only have 1 or 3 args to status (got 2)");
+        return NULL;
+    }
     int r = (int)lil_to_integer(argv[0]) & 0xFF;
-    int g = (int)lil_to_integer(argv[1]) & 0xFF;
-    int b = (int)lil_to_integer(argv[2]) & 0xFF;
-    int c = (r << 16) + (g << 8) + b;
-    status_led(c);
+    if (argc == 3) {
+        int g = (int)lil_to_integer(argv[1]) & 0xFF;
+        int b = (int)lil_to_integer(argv[2]) & 0xFF;
+        r = (r << 16) + (g << 8) + b;
+    }
+    status_led(r);
     return NULL;
 }
 
