@@ -9,4 +9,6 @@
 
 #define LIL_CHECKARGS(l, p, a, lo, hi) do { if (a < lo || a > hi) { LIL_FAILED(l, "Expected %i-%i args to " p ", got %i", lo, hi, a); return NULL; } } while (0)
 
+#define LIL_NOARGS(l, p, a) do { if (a != 0) { LIL_FAILED(l, p " takes no arguments (got %i)", a); return NULL; } } while (0)
+
 #endif
