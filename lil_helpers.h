@@ -13,6 +13,6 @@
 
 #define LIL_HASSUBCOMMANDS(lil, topcmd, argc) do { if (argc == 0) { LIL_FAILED(lil, topcmd " needs a subcommand (got nothing)"); return NULL; } } while (0)
 
-#define LIL_SUBCOMMAND(lil, topcmd, subcmd, argc, argv, subcmd_func) if (streq(lil_to_string(argv[0]), subcmd)) return subcmd_func(lil, argc - 1, &argv[1]);
+#define LIL_SUBCOMMAND(lil, subcmd, argc, argv, subcmd_func) if (streq(lil_to_string(argv[0]), subcmd)) return subcmd_func(lil, argc - 1, &argv[1]);
 
 #endif
