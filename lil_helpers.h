@@ -1,7 +1,7 @@
 #ifndef LIL_HELPERS_H
 #define LIL_HELPERS_H
 
-#define LIL_FAILED(lil, printf_args...) do { char* temp_buf_; asprintf(&temp_buf_, printf_args); lil_set_error(lil, temp_buf_); } while (0)
+#define LIL_FAILED(lil, printf_args...) do { char* temp_buf_; asprintf(&temp_buf_, printf_args); lil_set_error(lil, temp_buf_); free(temp_buf_); } while (0)
 
 #define streq(s1, s2) (strcmp(s1, s2) == 0)
 
