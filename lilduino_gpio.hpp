@@ -56,12 +56,23 @@ lil_value_t fnc_gpio_analogwrite(lil_t lil, int argc, lil_value_t* argv) {
     return NULL;
 }
 
+#ifdef touchRead
+lil_value_t fnc_gpio_touchread(lil_t lil, int argc, lil_value_t* argv) {
+    LIL_FIXARITY(lil, "gpio::touchread", 1);
+    int pin_no = (int)lil_to_integer(argv[0]);
+    return lil_alloc_integer(touchRead(pin_no));
+}
+#endif
+
 void lilduino_gpio_init(lil_t lil) {
     lil_register(lil, "gpio::pinmode", (lil_func_proc_t)fnc_gpio_pinmode);
     lil_register(lil, "gpio::digitalread", (lil_func_proc_t)fnc_gpio_digitalread);
     lil_register(lil, "gpio::digitalwrite", (lil_func_proc_t)fnc_gpio_digitalwrite);
     lil_register(lil, "gpio::analogread", (lil_func_proc_t)fnc_gpio_analogread);
     lil_register(lil, "gpio::analogwrite", (lil_func_proc_t)fnc_gpio_analogwrite);
+    #ifdef touchRead
+    lil_register(lil, "gpio::touchread", (lil_func_proc_t)fnc_gpio_touchread);
+    #endif
 }
 
 #endif
