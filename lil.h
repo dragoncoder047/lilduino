@@ -41,6 +41,10 @@
 #define LIL_CALLBACK_GETVAR 7
 #define LIL_CALLBACK_EMBEDDEDFILTER 8
 
+#define LIL_TYPE_STRING 0
+#define LIL_TYPE_INTEGER 1
+#define LIL_TYPE_DOUBLE 2
+
 #define LIL_EMBED_NOFLAGS 0x0000
 
 #if defined(LILDLL) && (defined(WIN32) || defined(_WIN32))
