@@ -28,7 +28,8 @@ lil_value_t fnc_wifi_connect(lil_t lil, int argc, lil_value_t* argv) {
     if (argc == 3) timeout = 1000 * (int)lil_to_integer(argv[3]);
     WiFi.begin(ssid, pass);
     unsigned long now = millis();
-    return lil_alloc_integer(WiFi.waitForConnectResult() == WL_CONNECTED ? 1 : 0);
+    while (WiFi.status() != WL_CONNECTED || millis() - now < timeout) delay(1000);
+    return lil_alloc_integer(WiFi.status() == WL_CONNECTED ? 1 : 0);
 }
 
 lil_value_t fnc_wifi_config(lil_t lil, int argc, lil_value_t* argv) {
