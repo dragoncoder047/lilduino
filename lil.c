@@ -2268,18 +2268,22 @@ const char* lil_to_string(lil_value_t val)
 //     return (lilint_t)atoll(lil_to_string(val));
 // }
 
-double lil_to_double(lil_value_t val)
-{
-    double d;
-    sscanf(lil_to_string(val), "%lf", &d);
-    return d;
-}
-
 lilint_t lil_to_integer(lil_value_t val)
 {
     lilint_t n;
-    sscanf(lil_to_string(val), "%lli", (uint64_t*)&n);
-    return n;
+    char c;
+    if (sscanf(lil_to_string(val), "%lli%c", (int64_t*)&n, &c) == 1) return n;
+    return 0;
+}
+
+double lil_to_double(lil_value_t val)
+{
+    double d;
+    char c;
+    lilint_t n = lil_to_integer(val);
+    if (n) return (double)n;
+    if (sscanf(lil_to_string(val), "%lf%c", &d, &c) == 1) return d;
+    return 0.;
 }
 
 int lil_to_boolean(lil_value_t val)
