@@ -32,12 +32,12 @@ lil_value_t fnc_wifi_connect(lil_t lil, int argc, lil_value_t* argv) {
     return lil_alloc_integer(WiFi.status() == WL_CONNECTED ? 1 : 0);
 }
 
-lil_value_t fnc_wifi_config(lil_t lil, int argc, lil_value_t* argv) {
-    LIL_FIXARITY(lil, "wifi::setupnet", argc, 2);
+lil_value_t fnc_wifi_softap(lil_t lil, int argc, lil_value_t* argv) {
+    LIL_FIXARITY(lil, "wifi::softap", argc, 2);
     const char* ssid = lil_to_string(argv[0]);
     const char* pass = lil_to_string(argv[1]);
     bool ok = WiFi.softAP(ssid, pass);
-    if (!ok) LIL_FAILED(lil, "Failed to configure wifi access point network");
+    if (!ok) LIL_FAILED(lil, "Failed to configure wifi soft ap");
     return NULL;
 }
 
@@ -66,6 +66,7 @@ lil_value_t fnc_wifi_ip(lil_t lil, int argc, lil_value_t* args) {
 void lilduino_wifi_init(lil_t lil) {
     lil_register(lil, "wifi::mode", (lil_func_proc_t)fnc_wifi_mode);
     lil_register(lil, "wifi::connect", (lil_func_proc_t)fnc_wifi_connect);
+    lil_register(lil, "wifi::softap", (lil_func_proc_t)fnc_wifi_softap);
     lil_register(lil, "wifi::mac", (lil_func_proc_t)fnc_wifi_mac);
     lil_register(lil, "wifi::ip", (lil_func_proc_t)fnc_wifi_ip);
 }
