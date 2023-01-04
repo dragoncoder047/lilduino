@@ -2,7 +2,7 @@
 
 Quick-and-dirty example of using Kostas Michalopoulos' [LIL](http://runtimeterror.com/tech/lil/) programming language on a microcontroller, using Arduino.
 
-The currently included sources and readme are for LIL 20211019 which was the latest version as of when I wrote this.
+The currently included sources and readme are for LIL 20211019 which was the latest version as of when I wrote this (but see the first [NOTE](#notes) at the bottom, I made a few patches).
 
 I tested it on an ESP32 and it ran perfectly without errors (that is, any segfaults or such. If I write bad code, it tells me so.) No guarantee for other platforms.
 
