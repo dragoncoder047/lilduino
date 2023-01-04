@@ -34,7 +34,7 @@ input [prompt]
 
 **Loader function:** `lilduino_fs_init(lil)`
 
-This also sets up `store`, `read`, and `source` to use the Arduino SD card file system, and `write` to use the `Serial` port, as well as directing unhandled errors to the serial port as well.
+This also sets up `store`, `read`, and `source` to use the Arduino SD card file system, and `write` to use the `Serial` port, as well as directing unhandled errors to the serial port.
 
 ```tcl
 mkdir <dir>
