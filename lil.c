@@ -64,7 +64,12 @@ typedef struct _hashmap_t
 struct _lil_value_t
 {
     size_t l;
-    char* d;
+    char* d; // Always there in case string is needed
+    union {
+        double fd; // Fast number types
+        lilint_t fi;
+    };
+    char t;
 };
 
 struct _lil_var_t
@@ -143,15 +148,6 @@ typedef struct _expreval_t
 
 static lil_value_t next_word(lil_t lil);
 static void register_stdcmds(lil_t lil);
-
-#ifdef LIL_ENABLE_POOLS
-static lil_value_t* pool;
-static int poolsize, poolcap;
-static lil_list_t* listpool;
-static size_t listpoolsize, listpoolcap;
-static lil_env_t* envpool;
-static size_t envpoolsize, envpoolcap;
-#endif
 
 static char* strclone(const char* s)
 {
@@ -237,6 +233,7 @@ static lil_value_t alloc_value_len(const char* str, size_t len)
         val->l = 0;
         val->d = NULL;
     }
+    val->t = LIL_TYPE_STRING;
     return val;
 }
 
@@ -252,6 +249,7 @@ lil_value_t lil_clone_value(lil_value_t src)
     val = calloc(1, sizeof(struct _lil_value_t));
     if (!val) return NULL;
     val->l = src->l;
+    val->t = src->t;
     if (src->l) {
         val->d = malloc(val->l + 1);
         if (!val->d) {
@@ -262,11 +260,14 @@ lil_value_t lil_clone_value(lil_value_t src)
     } else {
         val->d = NULL;
     }
+    if (src->t == LIL_TYPE_INT) val->fi = src->fi;
+    else if (src->t == LIL_TYPE_DOUBLE) val->fd = src->fd;
     return val;
 }
 
 int lil_append_char(lil_value_t val, char ch)
 {
+    val->t = LIL_TYPE_STRING; // Invalidates the number
     char* new = realloc(val->d, val->l + 2);
     if (!new) return 0;
     new[val->l++] = ch;
@@ -277,6 +278,7 @@ int lil_append_char(lil_value_t val, char ch)
 
 int lil_append_string_len(lil_value_t val, const char* s, size_t len)
 {
+    val->t = LIL_TYPE_STRING; // Invalidates the number
     char* new;
     if (!s || !s[0]) return 1;
     new = realloc(val->d, val->l + len + 1);
@@ -294,6 +296,7 @@ int lil_append_string(lil_value_t val, const char* s)
 
 int lil_append_val(lil_value_t val, lil_value_t v)
 {
+    val->t = LIL_TYPE_STRING; // Invalidates the number
     char* new;
     if (!v || !v->l) return 1;
     new = realloc(val->d, val->l + v->l + 1);
@@ -2095,19 +2098,29 @@ const char* lil_to_string(lil_value_t val)
 
 lilint_t lil_to_integer(lil_value_t val)
 {
+    if (val->t == LIL_TYPE_INTEGER) return val->fi;
     lilint_t n;
-    char c;
-    if (sscanf(lil_to_string(val), "%lli%c", (int64_t*)&n, &c) == 1) return n;
+    char trash;
+    if (sscanf(lil_to_string(val), "%lli%c", (int64_t*)&n, &trash) == 1) {
+        val->fi = n;
+        val->t = LIL_TYPE_INTEGER;
+        return n;
+    }
     return 0;
 }
 
 double lil_to_double(lil_value_t val)
 {
+    if (val->t == LIL_TYPE_DOUBLE) return val->fd;
     double d;
-    char c;
+    char trash;
     lilint_t n = lil_to_integer(val);
     if (n) return (double)n;
-    if (sscanf(lil_to_string(val), "%lf%c", &d, &c) == 1) return d;
+    if (sscanf(lil_to_string(val), "%lf%c", &d, &trash) == 1) {
+        val->fd = d;
+        val->t = LIL_TYPE_DOUBLE;
+        return d;
+    }
     return 0.;
 }
 
@@ -2139,15 +2152,21 @@ lil_value_t lil_alloc_string_len(const char* str, size_t len)
 lil_value_t lil_alloc_double(double num)
 {
     char buff[128];
-    sprintf(buff, "%f", num);
-    return alloc_value(buff);
+    sprintf(buff, "%lf", num);
+    lil_value_t r = alloc_value(buff);
+    r->t = LIL_TYPE_DOUBLE;
+    r->fd = num;
+    return r;
 }
 
 lil_value_t lil_alloc_integer(lilint_t num)
 {
     char buff[128];
     sprintf(buff, LILINT_PRINTF, num);
-    return alloc_value(buff);
+    lil_value_t r = alloc_value(buff);
+    r->t = LIL_TYPE_INTEGER;
+    r->fi = num;
+    return r;
 }
 
 void lil_free(lil_t lil)
