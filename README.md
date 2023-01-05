@@ -2,7 +2,7 @@
 
 Quick-and-dirty example of using Kostas Michalopoulos' [LIL](http://runtimeterror.com/tech/lil/) programming language on a microcontroller, using Arduino.
 
-The currently included sources and readme are for LIL 20211019 which was the latest version as of when I wrote this (but see the first [NOTE](#notes) at the bottom, I made a few patches).
+The currently included sources and readme are for LIL 20211019 which was the latest version as of when I wrote this (but see the [section at the bottom](#lil-patches), I made a few patches).
 
 I tested it on an ESP32 and it ran perfectly without errors (that is, any segfaults or such. If I write bad code, it tells me so.) No guarantee for other platforms.
 
@@ -138,9 +138,12 @@ gpio::touchread <pin>
   # Lower values mean the pin's electrode is being touched harder.
 ```
 
-## Notes
+## LIL Patches
 
-* The LIL implementation files provided here have been patched in `lil_to_double()` and `lil_to_integer()` to allow hexadecimal and octal numbers instead of only decimal (by using `sscanf()` instead of `atof()` / `atoll()`).
+* Better number parsing: `lil_to_double()` and `lil_to_integer()` patched to allow hexadecimal and octal numbers instead of only decimal (by using `sscanf()` instead of `atof()` / `atoll()`)
+* Deleted all memory pools code (`LIL_ENABLE_POOLS`) because it is useless on a microcontroller.
+
+## Notes
 
 * `mine` is a little bash script that makes the current user the owner of all files in the current working directory. I have it because for some reason I have to run the arduino IDE with `sudo` for it to work and as such when I save a file it changes the owner to `root` and then I can't edit the file anywhere else. Thus that script.
 
