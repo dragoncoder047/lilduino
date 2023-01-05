@@ -142,6 +142,7 @@ gpio::touchread <pin>
 
 * Better number parsing: `lil_to_double()` and `lil_to_integer()` patched to allow hexadecimal and octal numbers instead of only decimal (by using `sscanf()` instead of `atof()` / `atoll()`)
 * Deleted all memory pools code (`LIL_ENABLE_POOLS`) because it is useless on a microcontroller.
+* Added fast number types into the `_lil_value_t` struct to take advantage of hardware floating point support and reduce the number of string&rarr;number conversions, increasing speed and reliablilty.
 
 ## Notes
 
