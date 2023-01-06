@@ -260,7 +260,7 @@ lil_value_t lil_clone_value(lil_value_t src)
     } else {
         val->d = NULL;
     }
-    if (src->t == LIL_TYPE_INT) val->fi = src->fi;
+    if (src->t == LIL_TYPE_INTEGER) val->fi = src->fi;
     else if (src->t == LIL_TYPE_DOUBLE) val->fd = src->fd;
     return val;
 }
