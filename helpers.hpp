@@ -35,7 +35,7 @@ void fatal_status_loop(int d, size_t num, int colors[]) {
 }
 
 lil_value_t fnc_wait(lil_t lil, int argc, lil_value_t* argv) {
-    LIL_CHECKARGS(l, "wait", argc, 0, 2);
+    LIL_CHECKARGS(lil, "wait", argc, 0, 2);
     switch (argc) {
         case 0:
             delay(10); // Debouncing call
@@ -80,8 +80,9 @@ lil_value_t fnc_status(lil_t lil, int argc, lil_value_t* argv) {
         LIL_FAILED(lil, "Can only have 1 or 3 args to status (got 2)");
         return NULL;
     }
-    int r = (int)lil_to_integer(argv[0]) & 0xFF;
+    int r = (int)lil_to_integer(argv[0]);
     if (argc == 3) {
+        r &= 0xFF;
         int g = (int)lil_to_integer(argv[1]) & 0xFF;
         int b = (int)lil_to_integer(argv[2]) & 0xFF;
         r = (r << 16) + (g << 8) + b;

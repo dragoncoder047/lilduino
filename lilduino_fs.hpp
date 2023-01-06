@@ -23,10 +23,7 @@ char* readfile_cb(lil_t lil, const char* filename) {
         LIL_FAILED(lil, "File %s not found", filename);
         return strdup("");
     }
-    unsigned long sz = f.size();
-    char* buf = (char*)malloc(sz + 1);
-    f.read((uint8_t*)buf, sz + 1);
-    return buf;
+    return strdup(f.readStringUntil(0).c_str());
 }
 
 void writefile_cb(lil_t lil, const char* filename, const char* contents) {
@@ -44,23 +41,20 @@ void writefile_cb(lil_t lil, const char* filename, const char* contents) {
 
 lil_value_t fnc_mkdir(lil_t lil, int argc, lil_value_t* argv) {
     LIL_FIXARITY(lil, "mkdir", argc, 1);
-    const char* dir = lil_to_string(argv[0]);
-    int ok = SD.mkdir(dir);
-    if (!ok) LIL_FAILED(lil, "Failed to create directory %s", dir);
+    SD.mkdir(lil_to_string(argv[0]));
+    return NULL;
 }
 
 lil_value_t fnc_rm(lil_t lil, int argc, lil_value_t* argv) {
     LIL_FIXARITY(lil, "rm", argc, 1);
-    const char* filename = lil_to_string(argv[0]);
-    int ok = SD.remove(filename);
-    if (!ok) LIL_FAILED(lil, "Failed to remove %s", filename);
+    SD.remove(lil_to_string(argv[0]));
+    return NULL;
 }
 
 lil_value_t fnc_rmdir(lil_t lil, int argc, lil_value_t* argv) {
     LIL_FIXARITY(lil, "rmdir", argc, 1);
-    const char* dir = lil_to_string(argv[0]);
-    int ok = SD.rmdir(dir);
-    if (!ok) LIL_FAILED(lil, "Failed to remove directory %s", dir);
+    SD.rmdir(lil_to_string(argv[0]));
+    return NULL;
 }
 
 void lilduino_fs_init(lil_t lil) {

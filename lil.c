@@ -988,27 +988,18 @@ static void ee_skip_spaces(expreval_t* ee)
 
 static void ee_numeric_element(expreval_t* ee)
 {
-    lilint_t fpart = 0, fpartlen = 1;
     ee->type = EE_INT;
     ee_skip_spaces(ee);
     ee->ival = 0;
     ee->dval = 0;
-    while (ee->head < ee->len) {
-        if (ee->code[ee->head] == '.') {
-            if (ee->type == EE_FLOAT) break;
-            ee->type = EE_FLOAT;
-            ee->head++;
-        } else if (!isdigit(ee->code[ee->head])) break;
-        if (ee->type == EE_INT)
-            ee->ival = ee->ival*10 + (ee->code[ee->head] - '0');
-        else {
-            fpart = fpart*10 + (ee->code[ee->head] - '0');
-            fpartlen *= 10;
-        }
-        ee->head++;
+    int len = 0;
+    char pd = 0;
+    int gotint = sscanf(&ee->code[ee->head], "%lli%n%c", &ee->ival, &len, &pd);
+    if (!gotint || pd == '.') {
+        sscanf(&ee->code[ee->head], "%lf%n", &ee->dval, &len);
+        ee->type = EE_FLOAT;
     }
-    if (ee->type == EE_FLOAT)
-        ee->dval = ee->ival + (double)fpart/(double)fpartlen;
+    ee->head += len;
 }
 
 static void ee_element(expreval_t* ee)
@@ -2152,7 +2143,7 @@ lil_value_t lil_alloc_string_len(const char* str, size_t len)
 lil_value_t lil_alloc_double(double num)
 {
     char buff[128];
-    sprintf(buff, "%lf", num);
+    sprintf(buff, "%lg", num);
     lil_value_t r = alloc_value(buff);
     r->t = LIL_TYPE_DOUBLE;
     r->fd = num;

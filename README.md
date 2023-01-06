@@ -46,7 +46,7 @@ rm <file>
 
 rmdir <directory>
   # Removes a directory
-  # Will fail if the directory isn't empty
+  # Will fail silently if the directory isn't empty
 ```
 
 ### `lilduino_regexp.hpp` -- UNTESTED
@@ -104,35 +104,35 @@ wifi::ip [ip]
   # If an IP address is given, it sets this device's local IP to the one provided.
 ```
 
-### `lilduino_gpio.hpp` -- UNTESTED
+### `lilduino_gpio.hpp` -- TESTED
 
 **Loader function:** `lilduino_gpio_init(lil)`
 
 ```tcl
-gpio::pinmode <pin> <mode>
+gpio pinmode <pin> <mode>
   # Configures the I/O mode of the specified pin.
   # Mode can be "input", "output", "input_pullup", or "input_pulldown"
   # (the last is only available on some platforms)
 
-gpio::digitalread <pin>
+gpio digitalread <pin>
   # Reads the digital state of the pin and
   # returns 1 if high, 0 if low.
 
-gpio::digitalwrite <pin> <state>
+gpio digitalwrite <pin> <state>
   # Writes the state to the output pin.
   # The string "HIGH" and 1 are both interpreted
   # as high, anything else is low.
 
-gpio::analogread <pin>
+gpio analogread <pin>
   # Reads the analog voltage on the input pin and
   # returns a number corresponding to the voltage.
   # On ESP32 the ADC is 12 bits, 0-4095.
 
-gpio::analogwrite <pin> <duty cycle>
+gpio analogwrite <pin> <duty cycle>
   # Sets up PWM on the output pin with the
   # provided duty cycle (0-255 resolution).
 
-gpio::touchread <pin>
+gpio touchread <pin>
   # On devices with capacitive-touch hardware,
   # runs the touch detector on the pin and returns the counter value.
   # Lower values mean the pin's electrode is being touched harder.
@@ -140,7 +140,7 @@ gpio::touchread <pin>
 
 ## LIL Patches
 
-* Better number parsing: `lil_to_double()` and `lil_to_integer()` patched to allow hexadecimal and octal numbers instead of only decimal (by using `sscanf()` instead of `atof()` / `atoll()`)
+* Better number parsing - patched to allow hexadecimal and octal numbers instead of only decimal (by using `sscanf()` instead of `atof()` / `atoll()` and custom code in `ee_numeric_element()`)
 * Deleted all memory pools code (`LIL_ENABLE_POOLS`) because it is useless on a microcontroller.
 * Added fast number types into the `_lil_value_t` struct to take advantage of hardware floating point support and reduce the number of string&rarr;number conversions, increasing speed and reliablilty.
 

@@ -8,7 +8,7 @@ extern "C" {
 }
 
 #include "lilduino_fs.hpp"
-#include "lilduino_regexp.hpp"
+#include "lilduino_gpio.hpp"
 #include "helpers.hpp"
 
 void lil_run(lil_t lil, char* source) {
@@ -26,7 +26,8 @@ func repl {} {
         print $aaaaaaaa
         if [streq $aaaaaaaa done] {return}
         try {
-            print [upeval $aaaaaaaa]
+            set bbbbbbbb [upeval $aaaaaaaa]
+            if not [streq $bbbbbbbb ""] {print $bbbbbbbb}
         } {
             print Error: [reflect error]
         }
@@ -56,7 +57,7 @@ void setup() {
     lil = lil_new();
     lilduino_fs_init(lil);
     lilduino_helpers_init(lil);
-    lilduino_regexp_init(lil);
+    lilduino_gpio_init(lil);
 
     // Run main file
     Serial.println("LIL initialized...");
