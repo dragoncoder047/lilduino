@@ -9,6 +9,7 @@ extern "C" {
 
 #include "lilduino_fs.hpp"
 #include "lilduino_gpio.hpp"
+#include "lilduino_regexp.hpp"
 #include "helpers.hpp"
 
 void lil_run(lil_t lil, char* source) {
@@ -58,6 +59,7 @@ void setup() {
     lilduino_fs_init(lil);
     lilduino_helpers_init(lil);
     lilduino_gpio_init(lil);
+    lilduino_regexp_init(lil);
 
     // Run main file
     Serial.println("LIL initialized...");

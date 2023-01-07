@@ -49,14 +49,14 @@ rmdir <directory>
   # Will fail silently if the directory isn't empty
 ```
 
-### `lilduino_regexp.hpp` -- UNTESTED
+### `lilduino_regexp.hpp` -- TESTED
 
 **Loader function:** `lilduino_regexp_init(lil)`
 
 Depends on [Nick Gammon's regular expression library](https://github.com/nickgammon/Regexp), make sure you have that installed.
 
 ```tcl
-re::match <regexp> <string> [var1 var2 ...]
+regmatch <regexp> <string> [var1 var2 ...]
   # Matches the regular expression against the string.
   # If any vars are provided, they are filled with the capture
   # groups present in the regular expression.
@@ -65,10 +65,13 @@ re::match <regexp> <string> [var1 var2 ...]
   # filled with garbage, at worst, your microcontroller will segfault).
   # Returns the entire match, empty string if no match.
 
-re::replace <regexp> <string> <replacement> [maxrepl]
+regsub <regexp> <string> <replacement> [maxrepl]
   # Replaces all matches of the regexp in the string with the
   # replacement string (no support for back referencing capture groups yet).
   # If maxrepl is given and > 0, it limits the maximum number of replacements to be made.
+  # Note this is quite different than the Tcl standard regsub command.
+  # WARNING: if the resultant replaced string would be longer than the original,
+  # the buffer will overflow and corrupt the heap (likely causing a crash).
 ```
 
 ### `lilduino_wifi.hpp` -- UNTESTED
