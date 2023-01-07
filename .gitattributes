@@ -1,4 +1,2 @@
-lil.c linguist-vendored
-lil.h linguist-vendored
 lil-readme.txt linguist-vendored
 *.lil linguist-language=Tcl
