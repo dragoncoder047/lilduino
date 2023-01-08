@@ -75,6 +75,7 @@ lil_value_t fnc_gpio(lil_t lil, int argc, lil_value_t* argv) {
     LIL_SUBCOMMAND(lil, "touchread", argc, argv, fnc_gpio_touchread);
     #endif
     LIL_ENDSUBCOMMANDS(lil, "gpio", argv);
+    return NULL;
 }
 
 void lilduino_gpio_init(lil_t lil) {

@@ -108,6 +108,27 @@ regsub <regexp> <string> <replacement> [maxrepl]
   # the buffer will overflow and corrupt the heap (likely causing a crash).
 ```
 
+### `lilduino_ir.hpp` -- UNTESTED, INCOMPLETE
+
+**Loader function:** `lilduino_ir_init(lil)`
+
+Depends on [David Conran's ESP8266 infrared library](https://github.com/crankyoldgit/IRremoteESP8266), make sure you have that installed.
+
+```tcl
+set ir.rxpin <pin>
+set ir.txpin <pin>
+  # Variables used to hold the pin numbers
+  # the IR decoder library uses to receive and transmit.
+
+ir receive
+  # Tries to receive an infrared code from a demodulator connected to the rxpin.
+  # Returns nothing if it timed out, otherwise a list of {protocol value}.
+
+ir send <protocol> <value>
+  # Sends an infrared message on an infrared LED connected (preferably though a transistor) to the txpin.
+  # Throws an error if the protocol or value was invalid.
+```
+
 ### `lilduino_wifi.hpp` -- UNTESTED
 
 **Loader function:** `lilduino_wifi_init(lil)`
