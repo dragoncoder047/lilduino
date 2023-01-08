@@ -10,6 +10,7 @@ extern "C" {
 #include "lilduino_fs.hpp"
 #include "lilduino_gpio.hpp"
 #include "lilduino_regexp.hpp"
+#include "lilduino_ir.hpp"
 #include "helpers.hpp"
 
 void lil_run(lil_t lil, char* source) {
@@ -20,7 +21,7 @@ lil_t lil;
 
 int SD_FAILED_ERR_BLINK[3] = {0x000040, 0x400000, 0x000000};
 
-const char* bootstrap_code = R"===(
+const char* kernel = R"===(
 func repl {} {
     while 1 {
         set aaaaaaaa [input "> "]
@@ -60,10 +61,11 @@ void setup() {
     lilduino_helpers_init(lil);
     lilduino_gpio_init(lil);
     lilduino_regexp_init(lil);
+    lilduino_ir_init(lil);
 
     // Run main file
     Serial.println("LIL initialized...");
-    lil_run(lil, (char*)bootstrap_code);
+    lil_run(lil, (char*)kernel);
 
     // Clean up
     Serial.println("lil_run() returned, cleaning up");

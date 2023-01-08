@@ -6,7 +6,6 @@
 #include <IRrecv.h>
 #include <IRsend.h>
 #include <IRremoteESP8266.h>
-#include <IRtext.h>
 #include <IRutils.h>
 
 extern "C" {
@@ -23,16 +22,16 @@ lil_value_t fnc_ir_send(lil_t lil, int argc, lil_value_t* argv) {
         LIL_FAILED(lil, "unknown IR protocol %s", protocol_str);
         return NULL;
     }
-    int sendPin = lil_to_integer(lil_get_var(lil, "ir.txpin"));
-    if (sendPin == 0) {
-        LIL_FAILED(lil, "ir.txpin is not defined or invalid");
+    int txpin = (int)lil_to_integer(lil_get_var(lil, "ir.txpin"));
+    if (txpin == 0) {
+        LIL_FAILED(lil, "ir.txpin is not defined or invalid (it is %s)", lil_to_string(lil_get_var(lil, "ir.txpin")));
         return NULL;
     }
-    IRsend sender(sendPin);
+    IRsend sender(txpin);
     uint16_t rep = sender.minRepeats(protocol);
     uint16_t bits = sender.defaultBits(protocol);
     if (value >= (1 << bits)) {
-        LIL_FAILED(lil, "value of %#llx is too large for protocol %s (max is %#llx)", value, protocol_str, (1 << bits) - 1);
+        LIL_FAILED(lil, "value of %#llx is too large for IR protocol %s (max is %#llx)", value, protocol_str, (1 << bits) - 1);
         return NULL;
     }
     sender.begin();
@@ -41,8 +40,24 @@ lil_value_t fnc_ir_send(lil_t lil, int argc, lil_value_t* argv) {
 }
 
 lil_value_t fnc_ir_receive(lil_t lil, int argc, lil_value_t* argv) {
-    LIL_NOARGS(lil, "ir recieve", argc);
-    // TODO
+    LIL_NOARGS(lil, "ir receive", argc);
+    int rxpin = (int)lil_to_integer(lil_get_var(lil, "ir.rxpin"));
+    if (rxpin == 0) {
+        LIL_FAILED(lil, "ir.rxpin is not defined or invalid (it is %s)", lil_to_string(lil_get_var(lil, "ir.rxpin")));
+        return NULL;
+    }
+    IRrecv reciever(rxpin, 1024, 15, true);
+    reciever.setTolerance(kTolerance);
+    reciever.enableIRIn();
+    decode_results results;
+    int recieved = reciever.decode(&results);
+    if (!recieved) return NULL;
+    char* buf;
+    asprintf(&buf, "%s %#x", typeToString(results.decode_type).c_str(), results.value);
+    lil_value_t val = lil_alloc_string(buf);
+    free(buf);
+    reciever.disableIRIn(); // Frees the interrupts
+    return val;
 }
 
 lil_value_t fnc_ir(lil_t lil, int argc, lil_value_t* argv) {

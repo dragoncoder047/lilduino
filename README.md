@@ -108,7 +108,7 @@ regsub <regexp> <string> <replacement> [maxrepl]
   # the buffer will overflow and corrupt the heap (likely causing a crash).
 ```
 
-### `lilduino_ir.hpp` -- UNTESTED, INCOMPLETE
+### `lilduino_ir.hpp` -- UNTESTED
 
 **Loader function:** `lilduino_ir_init(lil)`
 
