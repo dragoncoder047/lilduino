@@ -1,0 +1,11 @@
+print Hello, World!
+set LED_BUILTIN 13
+gpio pinmode $LED_BUILTIN output
+while 1 {
+    gpio digialwrite $LED_BUILTIN HIGH
+    print High!
+    wait 1 second
+    gpio digitalwrite $LED_BUILTIN LOW
+    print Low!
+    wait 1 second
+}
