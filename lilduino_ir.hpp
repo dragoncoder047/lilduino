@@ -39,6 +39,8 @@ lil_value_t fnc_ir_send(lil_t lil, int argc, lil_value_t* argv) {
     return NULL;
 }
 
+IRrecv* RECIEVERS[128] = {NULL}; // 128 pins is more than enough
+
 lil_value_t fnc_ir_receive(lil_t lil, int argc, lil_value_t* argv) {
     LIL_NOARGS(lil, "ir receive", argc);
     int rxpin = (int)lil_to_integer(lil_get_var(lil, "ir.rxpin"));
@@ -46,17 +48,20 @@ lil_value_t fnc_ir_receive(lil_t lil, int argc, lil_value_t* argv) {
         LIL_FAILED(lil, "ir.rxpin is not defined or invalid (it is %s)", lil_to_string(lil_get_var(lil, "ir.rxpin")));
         return NULL;
     }
-    IRrecv reciever(rxpin, 1024, 15, true);
-    reciever.setTolerance(kTolerance);
-    reciever.enableIRIn();
+    IRrecv* reciever = RECIEVERS[rxpin];
+    if (reciever == NULL) {
+        reciever = new IRrecv(rxpin, 1024, 15, true);
+        RECIEVERS[rxpin] = reciever;
+        reciever->setTolerance(kTolerance);
+        reciever->enableIRIn();
+    }
     decode_results results;
-    int recieved = reciever.decode(&results);
+    int recieved = reciever->decode(&results);
     if (!recieved) return NULL;
     char* buf;
     asprintf(&buf, "%s %#x", typeToString(results.decode_type).c_str(), results.value);
     lil_value_t val = lil_alloc_string(buf);
     free(buf);
-    reciever.disableIRIn(); // Frees the interrupts
     return val;
 }
 
