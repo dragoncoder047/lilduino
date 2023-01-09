@@ -1,0 +1,8 @@
+set ir.rxpin 14
+print Listening for IR codes on pin $ir.rxpin
+while 1 {
+    set code [ir receive]
+    if $code {
+        print Recieved: $code
+    }
+}
