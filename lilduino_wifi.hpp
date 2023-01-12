@@ -1,3 +1,39 @@
+/*
+
+Basic functions for interfacing with wifi-enabled uC's.
+
+No real useful functionality yet and entirely untested (this may not even compile).
+
+    wifi::mode <mode>
+      Mode is one of "device", "server", or "proxy".
+      Sets up the mode of operation of the wifi module.
+      "device" -> as a wifi station, same behavior as your phone or laptop
+      "server" -> as a wifi access point, which your phone or laptop can connect to
+      "proxy" -> both an access point and station
+
+    wifi::connect <ssid> <password> [timeout]
+      Connect to the named wifi network.
+      Only makes sense if a previous "wifi::mode device"
+      or "wifi::mode proxy" command was issued.
+      Timeout is in seconds and defaults to 10.
+      Returns 1 if connected, 0 if timed out.
+
+    wifi::softap <ssid> <password>
+      Sets up the SSID and password of the broadcasted network.
+      Only makes sense if a previous "wifi::mode server"
+      or "wifi::mode proxy" command was issued.
+
+    wifi::mac
+      Returns the device's MAC address as a xx:xx:xx:xx:xx:xx string.
+
+    wifi::ip [ip]
+      If no IP address is provided, returns the device's
+      current (manually or automatically) configured IP address.
+      If an IP address is given, it sets this device's local IP to the one provided.
+
+
+*/
+
 #ifndef LILDUINO_WIFI_FILE
 #define LILDUINO_WIFI_FILE
 
