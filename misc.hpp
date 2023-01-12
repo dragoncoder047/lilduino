@@ -1,5 +1,24 @@
-#ifndef MY_HELPERS_FILE
-#define MY_HELPERS_FILE
+/*
+
+Some random functions I thought would be useful. They rely heavily on
+the hardware on my board (an ESP32); don't expect them all to work on your board.
+
+    delay [n] [unit]
+      Wait for a period of time
+      Units available: s/sec/seconds,
+                       m/ms/milliseconds,
+                       u/us/microseconds
+      Default is 10 milliseconds
+
+    status <color>
+    status <r> <g> <b>
+      Set the color of the on-board WS2182 status LED
+      Color is a 24-bit 0xRRGGBB form
+
+*/
+
+#ifndef MISC_FILE
+#define MISC_FILE
 
 #include <Arduino.h>
 #include <stdlib.h>
@@ -34,8 +53,8 @@ void fatal_status_loop(int d, size_t num, int colors[]) {
     }
 }
 
-lil_value_t fnc_wait(lil_t lil, int argc, lil_value_t* argv) {
-    LIL_CHECKARGS(lil, "wait", argc, 0, 2);
+lil_value_t fnc_delay(lil_t lil, int argc, lil_value_t* argv) {
+    LIL_CHECKARGS(lil, "delay", argc, 0, 2);
     switch (argc) {
         case 0:
             delay(10); // Debouncing call
@@ -91,19 +110,9 @@ lil_value_t fnc_status(lil_t lil, int argc, lil_value_t* argv) {
     return NULL;
 }
 
-lil_value_t fnc_input(lil_t lil, int argc, lil_value_t* argv) {
-    for (int i = 0; i < argc; i++) {
-        lil_write(lil, lil_to_string(argv[i]));
-        if (i + 1 != argc) lil_write(lil, " ");
-    }
-    while (Serial.available() == 0) yield(); // Wait for stuff to become available
-    return lil_alloc_string(Serial.readStringUntil('\n').c_str());
-}
-
 void lilduino_helpers_init(lil_t lil) {
-    lil_register(lil, "wait", (lil_func_proc_t)fnc_wait);
+    lil_register(lil, "delay", (lil_func_proc_t)fnc_delay);
     lil_register(lil, "status", (lil_func_proc_t)fnc_status);
-    lil_register(lil, "input", (lil_func_proc_t)fnc_input);
 }
 
 #endif
