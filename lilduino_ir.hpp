@@ -1,3 +1,30 @@
+/*
+
+Functions for sending and receiving different IR protocols using a demodulator IC
+and an infrared LED.
+
+Depends on David Conran's ESP8266 infrared library, make sure you have that installed:
+https://github.com/crankyoldgit/IRremoteESP8266
+
+If you don't have an ESPxx uC, you could probably try another IR library,
+but then again you also need to have a uC that can run LIL anyway!
+
+    set ir.rxpin <pin>
+    set ir.txpin <pin>
+      Variables used to hold the pin numbers
+      the IR decoder library uses to receive and transmit.
+
+    ir receive
+      Tries to receive an infrared code from a demodulator connected to the rxpin.
+      Returns nothing if it timed out, otherwise a list of {protocol value}.
+
+    ir send <protocol> <value>
+      Sends an infrared message on an infrared LED connected
+      (preferably though a transistor) to the txpin.
+      Throws an error if the protocol or value was invalid.
+
+*/
+
 #ifndef LILDUINO_IR_FILE
 #define LILDUINO_IR_FILE
 
