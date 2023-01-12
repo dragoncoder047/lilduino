@@ -1,5 +1,30 @@
-#ifndef LILDUINO_FS_FILE
-#define LILDUINO_FS_FILE
+/*
+
+This module sets up store, read, and source to use the
+Arduino SD card file system, and write to use the serial port,
+as well as directing unhandled errors to the serial port.
+Also a function to read a line pasted into the serial port.
+
+    mkdir <dir>
+      Creates the directory on the SD card.
+      Does nothing if the directory already exists.
+
+    rm <file>
+      Deletes the file from the SD card.
+      Does nothing if the file doesn't exist.
+
+    rmdir <directory>
+      Removes a directory.
+      Will fail silently if the directory isn't empty.
+
+    input [prompt]
+      Print the prompt and return the next
+      line of input from the serial port.
+
+*/
+
+#ifndef LILDUINO_IO_FILE
+#define LILDUINO_IO_FILE
 
 #include <Arduino.h>
 #include <SD.h>
@@ -57,7 +82,42 @@ lil_value_t fnc_rmdir(lil_t lil, int argc, lil_value_t* argv) {
     return NULL;
 }
 
-void lilduino_fs_init(lil_t lil) {
+#define input_CHUNK 32
+lil_value_t fnc_input(lil_t lil, int argc, lil_value_t* argv) {
+    for (int i = 0; i < argc; i++) {
+        lil_write(lil, lil_to_string(argv[i]));
+        if (i + 1 != argc) lil_write(lil, " ");
+    }
+    size_t sz = input_CHUNK;
+    char* buf = (char*) malloc(sz);
+    if (buf == NULL) {
+        LIL_FAILED(lil, "Out of memory");
+        return NULL;
+    }
+    size_t ptr = 0;
+    while (true) {
+        yield();
+        if (Serial.available() > 0) {
+            char c = Serial.read();
+            if (c == '\n') break;
+            ptr++;
+            if (ptr == sz) {
+                sz += input_CHUNK;
+                buf = (char*) realloc((void*)buf, sz);
+                if (buf == NULL) {
+                    LIL_FAILED(lil, "Out of memory");
+                    return NULL;
+                }
+            }
+            buf[ptr] = c;
+        }
+    }
+    lil_value_t val = lil_alloc_string(buf);
+    free(buf);
+    return val;
+}
+
+void lilduino_io_init(lil_t lil) {
     lil_callback(lil, LIL_CALLBACK_WRITE, (lil_callback_proc_t)output_cb);
     lil_callback(lil, LIL_CALLBACK_ERROR, (lil_callback_proc_t)error_cb);
     lil_callback(lil, LIL_CALLBACK_READ, (lil_callback_proc_t)readfile_cb);
@@ -65,6 +125,7 @@ void lilduino_fs_init(lil_t lil) {
     lil_register(lil, "mkdir", (lil_func_proc_t)fnc_mkdir);
     lil_register(lil, "rm", (lil_func_proc_t)fnc_rm);
     lil_register(lil, "rmdir", (lil_func_proc_t)fnc_rmdir);
+    lil_register(lil, "input", (lil_func_proc_t)fnc_input);
 }
 
 #endif
