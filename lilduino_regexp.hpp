@@ -1,4 +1,28 @@
-// Dependency: https://github.com/nickgammon/Regexp
+/*
+
+Lua-ish regular expression bindings for LILduino.
+
+Dependency: https://github.com/nickgammon/Regexp
+
+    regmatch <regexp> <string> [var1 var2 ...]
+      Matches the regular expression against the string.
+      If any vars are provided, they are filled with the capture
+      groups present in the regular expression.
+      Providing more variables than capture groups will result in
+      undefined behavior (at best, the offending variables get
+      filled with garbage, at worst, your microcontroller will segfault).
+      Returns the entire match, empty string if no match.
+
+    regsub <regexp> <string> <replacement> [maxrepl]
+      Replaces all matches of the regexp in the string with the
+      replacement string (no support for back referencing capture groups yet).
+      If maxrepl is given and > 0, it limits the maximum number of replacements to be made.
+      Note this is quite different than the Tcl standard regsub command.
+      WARNING: if the resultant replaced string would be longer than the original,
+      the buffer will overflow and corrupt the heap (likely causing a crash).
+
+
+*/
 
 #ifndef LILDUINO_REGEXP_FILE
 #define LILDUINO_REGEXP_FILE
