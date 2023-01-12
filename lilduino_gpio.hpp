@@ -1,3 +1,39 @@
+/*
+
+gpio -- functions to access the GPIO pins on
+the microcontroller.
+
+    gpio pinmode <pin> <mode>
+      Configures the I/O mode of the specified pin.
+      Mode can be "input", "output", "input_pullup", or "input_pulldown"
+      (the last is only available on some platforms)
+
+    gpio digitalread <pin>
+      Reads the digital state of the pin and
+      returns 1 if high, 0 if low.
+
+    gpio digitalwrite <pin> <state>
+      Writes the state to the output pin.
+      The string "LOW" or "low" is interpreted
+      as low, anything else defers to lil_to_boolean()
+      (basically 1 = high, 0 = low).
+
+    gpio analogread <pin>
+      Reads the analog voltage on the input pin and
+      returns a number corresponding to the voltage.
+      On ESP32 the ADC is 12 bits, 0-4095.
+
+    gpio analogwrite <pin> <duty cycle>
+      Sets up PWM on the output pin with the
+      provided duty cycle (0-255 resolution).
+
+    gpio touchread <pin>
+      On devices with capacitive-touch hardware,
+      runs the touch detector on the pin and returns the counter value.
+      Lower values mean the pin's electrode is being touched harder.
+
+*/
+
 #ifndef LILDUINO_GPIO_FILE
 #define LILDUINO_GPIO_FILE
 
