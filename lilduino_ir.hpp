@@ -59,7 +59,7 @@ lil_value_t fnc_ir_receive(lil_t lil, int argc, lil_value_t* argv) {
     int recieved = reciever->decode(&results);
     if (!recieved) return NULL;
     char* buf;
-    asprintf(&buf, "%s %#x", typeToString(results.decode_type).c_str(), results.value);
+    asprintf(&buf, "%s %#llx", typeToString(results.decode_type).c_str(), results.value);
     lil_value_t val = lil_alloc_string(buf);
     free(buf);
     return val;
