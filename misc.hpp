@@ -43,16 +43,6 @@ void status_led(int color) {
     neopixelWrite(RGB_BUILTIN, r, g, b);
 }
 
-void fatal_status_loop(int d, size_t num, int colors[]) {
-    while (1) {
-        for (size_t i = 0; i < num; i++) {
-            yield();
-            status_led(colors[i]);
-            delay(d);
-        }
-    }
-}
-
 lil_value_t fnc_delay(lil_t lil, int argc, lil_value_t* argv) {
     LIL_CHECKARGS(lil, "delay", argc, 0, 2);
     switch (argc) {
@@ -110,7 +100,7 @@ lil_value_t fnc_status(lil_t lil, int argc, lil_value_t* argv) {
     return NULL;
 }
 
-void lilduino_helpers_init(lil_t lil) {
+void lilduino_misc_init(lil_t lil) {
     lil_register(lil, "delay", (lil_func_proc_t)fnc_delay);
     lil_register(lil, "status", (lil_func_proc_t)fnc_status);
 }
