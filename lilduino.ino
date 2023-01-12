@@ -7,11 +7,11 @@ extern "C" {
     #include "lil_helpers.h"
 }
 
-#include "lilduino_fs.hpp"
+#include "lilduino_io.hpp"
 #include "lilduino_gpio.hpp"
 #include "lilduino_regexp.hpp"
 #include "lilduino_ir.hpp"
-#include "helpers.hpp"
+#include "misc.hpp"
 
 void lil_run(lil_t lil, char* source) {
     lil_free_value(lil_parse(lil, source, 0, 1));
@@ -20,6 +20,16 @@ void lil_run(lil_t lil, char* source) {
 lil_t lil;
 
 int SD_FAILED_ERR_BLINK[3] = {0x000040, 0x400000, 0x000000};
+
+void fatal_status_loop(int d, size_t num, int colors[]) {
+    while (1) {
+        for (size_t i = 0; i < num; i++) {
+            yield();
+            status_led(colors[i]);
+            delay(d);
+        }
+    }
+}
 
 const char* kernel = R"===(
 func repl {} {
@@ -57,8 +67,8 @@ void setup() {
     
     // Set up LIL
     lil = lil_new();
-    lilduino_fs_init(lil);
-    lilduino_helpers_init(lil);
+    lilduino_io_init(lil);
+    lilduino_misc_init(lil);
     lilduino_gpio_init(lil);
     lilduino_regexp_init(lil);
     lilduino_ir_init(lil);
