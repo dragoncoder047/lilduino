@@ -40,6 +40,7 @@
 #define LIL_CALLBACK_SETVAR 6
 #define LIL_CALLBACK_GETVAR 7
 #define LIL_CALLBACK_EMBEDDEDFILTER 8
+#define LIL_CALLBACK_CHECKINTERRUPT 9
 
 #define LIL_TYPE_STRING 0
 #define LIL_TYPE_INTEGER 1
@@ -92,6 +93,7 @@ typedef LILCALLBACK void (*lil_error_callback_proc_t)(lil_t lil, size_t pos, con
 typedef LILCALLBACK int (*lil_setvar_callback_proc_t)(lil_t lil, const char* name, lil_value_t* value);
 typedef LILCALLBACK int (*lil_getvar_callback_proc_t)(lil_t lil, const char* name, lil_value_t* value);
 typedef LILCALLBACK const char* (*lil_embeddedfilter_callback_proc_t)(lil_t lil, const char* msg);
+typedef LILCALLBACK const char* (*lil_checkinterrupt_callback_proc_t)(lil_t lil);
 typedef LILCALLBACK void (*lil_callback_proc_t)(void);
 
 LILAPI lil_t lil_new(void);
