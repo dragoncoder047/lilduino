@@ -2,8 +2,8 @@
 
 This module sets up store, read, and source to use the
 Arduino SD card file system, and write to use the serial port,
-as well as directing unhandled errors to the serial port.
-Also a function to read a line pasted into the serial port.
+as well as directing unhandled errors to the serial port, and sets
+up receiving a ~ when nothing is expected causes a "keyboard interrupt".
 
     mkdir <dir>
       Creates the directory on the SD card.
@@ -64,6 +64,13 @@ void writefile_cb(lil_t lil, const char* filename, const char* contents) {
     if (towrite != written) LIL_FAILED(lil, "Failed to write to %s (%u/%u bytes successfully written)", filename, written, towrite);
 }
 
+void interrupt_cb(lil_t lil) {
+    if (Serial.available() > 0 && Serial.peek() == '~') {
+        Serial.read();
+        LIL_FAILED(lil, "Keyboard interrupt");
+    }
+}
+
 lil_value_t fnc_mkdir(lil_t lil, int argc, lil_value_t* argv) {
     LIL_FIXARITY(lil, "mkdir", argc, 1);
     SD.mkdir(lil_to_string(argv[0]));
@@ -122,6 +129,7 @@ void lilduino_io_init(lil_t lil) {
     lil_callback(lil, LIL_CALLBACK_ERROR, (lil_callback_proc_t)error_cb);
     lil_callback(lil, LIL_CALLBACK_READ, (lil_callback_proc_t)readfile_cb);
     lil_callback(lil, LIL_CALLBACK_STORE, (lil_callback_proc_t)writefile_cb);
+    lil_callback(lil, LIL_CALLBACK_CHECKINTERRUPT, (lil_callback_proc_t)interrupt_cb);
     lil_register(lil, "mkdir", (lil_func_proc_t)fnc_mkdir);
     lil_register(lil, "rm", (lil_func_proc_t)fnc_rm);
     lil_register(lil, "rmdir", (lil_func_proc_t)fnc_rmdir);
