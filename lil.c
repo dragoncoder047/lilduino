@@ -37,7 +37,7 @@
 #define ERROR_DEFAULT 1
 #define ERROR_FIXHEAD 2
 
-#define CALLBACKS 9
+#define CALLBACKS 10
 #define MAX_CATCHER_DEPTH 16384
 #define HASHMAP_CELLS 256
 #define HASHMAP_CELLMASK 0xFF
@@ -795,6 +795,11 @@ lil_value_t lil_parse(lil_t lil, const char* code, size_t codelen, int funclevel
         goto cleanup;
     }
 #endif
+    if (lil->callback[LIL_CALLBACK_CHECKINTERRUPT]) {
+        lil_checkinterrupt_callback_proc_t proc = (lil_checkinterrupt_callback_proc_t)lil->callback[LIL_CALLBACK_CHECKINTERRUPT];
+        proc(lil);
+        if (lil->error) goto cleanup;
+    }
     if (lil->parse_depth == 1) lil->error = 0;
     if (funclevel) lil->env->breakrun = 0;
     while (lil->head < lil->clen && !lil->error) {
