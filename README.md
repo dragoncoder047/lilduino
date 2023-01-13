@@ -12,7 +12,7 @@ Documentation included at the top of each extension file.
 
 * Better number parsing - patched to allow hexadecimal and octal numbers instead of only decimal (by using `sscanf()` instead of `atof()` / `atoll()` and custom code in `ee_numeric_element()`)
 * Deleted all memory pools code (`LIL_ENABLE_POOLS`) because it is useless on a microcontroller.
-* Added fast number types into the `_lil_value_t` struct to take advantage of hardware floating point support where available and reduce the number of string&rarr;number conversions, increasing speed and reliablilty.
+* Added fast number types into the `_lil_value_t` struct to take advantage of hardware floating point support where available and reduce the number of string-->number conversions, increasing speed and reliablilty.
 * Added a 10th callback, `LIL_CALLBACK_CHECKINTERRUPT`/`void (*lil_checkinterrupt_callback_proc_t)(void)`, which gets called by `lil_parse()` before code is run, and can be used to periodically check for a keyboard interrupt and break out of an infinite loop.
 
 ## Notes
