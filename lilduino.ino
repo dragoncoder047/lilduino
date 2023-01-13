@@ -1,5 +1,7 @@
 #include <SPI.h>
+#include <Wire.h>
 #include <SD.h>
+#include "SparkFun_MAX1704x_Fuel_Gauge_Arduino_Library.h"
 #include <stdlib.h>
 
 extern "C" {
@@ -11,6 +13,7 @@ extern "C" {
 #include "lilduino_gpio.hpp"
 #include "lilduino_regexp.hpp"
 #include "lilduino_ir.hpp"
+#include "lilduino_battery.hpp"
 #include "misc.hpp"
 
 void lil_run(lil_t lil, char* source) {
@@ -19,7 +22,9 @@ void lil_run(lil_t lil, char* source) {
 
 lil_t lil;
 
-int SD_FAILED_ERR_BLINK[3] = {0x000040, 0x400000, 0x000000};
+SFE_MAX1704X battery(SFE_MAX17048);
+
+int sd_card_failed_blink[3] = {0x000040, 0x400000, 0x000000};
 
 void fatal_status_loop(int d, size_t num, int colors[]) {
     while (1) {
@@ -36,7 +41,7 @@ func repl {} {
     while 1 {
         set aaaaaaaa [input "> "]
         print $aaaaaaaa
-        if [streq $aaaaaaaa done] {return}
+        if [streq $aaaaaaaa done] return
         try {
             set bbbbbbbb [upeval $aaaaaaaa]
             if not [streq $bbbbbbbb ""] {print $bbbbbbbb}
@@ -62,7 +67,16 @@ void setup() {
     Serial.begin(115200);
     if (!SD.begin()) {
         Serial.println("SD initialization failed");
-        fatal_status_loop(500, 3, SD_FAILED_ERR_BLINK);
+        fatal_status_loop(500, 3, sd_card_failed_blink);
+    }
+    Wire.begin();
+    if (!battery.begin()) {
+        Serial.println("MAX17048 is down");
+        status_led(0x004000);
+        delay(500);
+        status_led(0x400000);
+        delay(500);
+        status_led(0);
     }
     
     // Set up LIL
@@ -72,6 +86,7 @@ void setup() {
     lilduino_gpio_init(lil);
     lilduino_regexp_init(lil);
     lilduino_ir_init(lil);
+    lilduino_battery_init(lil, &battery);
 
     // Run main file
     Serial.println("LIL initialized...");
