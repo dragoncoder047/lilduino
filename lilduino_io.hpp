@@ -71,23 +71,16 @@ void interrupt_cb(lil_t lil) {
     }
 }
 
-lil_value_t fnc_mkdir(lil_t lil, int argc, lil_value_t* argv) {
-    LIL_FIXARITY(lil, "mkdir", argc, 1);
-    SD.mkdir(lil_to_string(argv[0]));
-    return NULL;
-}
+#define _sdfun(name, sdfun) \
+    lil_value_t fnc_##name(lil_t lil, int argc, lil_value_t* argv) { \
+        LIL_FIXARITY(lil, #name, argc, 1); \
+        SD.sdfun(lil_to_string(argv[0])); \
+        return NULL; \
+    } \
 
-lil_value_t fnc_rm(lil_t lil, int argc, lil_value_t* argv) {
-    LIL_FIXARITY(lil, "rm", argc, 1);
-    SD.remove(lil_to_string(argv[0]));
-    return NULL;
-}
-
-lil_value_t fnc_rmdir(lil_t lil, int argc, lil_value_t* argv) {
-    LIL_FIXARITY(lil, "rmdir", argc, 1);
-    SD.rmdir(lil_to_string(argv[0]));
-    return NULL;
-}
+_sdfun(mkdir, mkdir)
+_sdfun(rm, remove)
+_sdfun(rmdir, rmdir)
 
 #define input_CHUNK 32
 lil_value_t fnc_input(lil_t lil, int argc, lil_value_t* argv) {
