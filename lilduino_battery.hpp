@@ -36,7 +36,7 @@ extern "C" {
 SFE_MAX1704X* the_battery;
 
 #define _batt_func(name, bcall, ta, tc) \
-    void fnc_battery_##name(lil_t lil, int argc, lil_value_t* argv) { \
+    lil_value_t fnc_battery_##name(lil_t lil, int argc, lil_value_t* argv) { \
         LIL_NOARGS(lil, "battery " #name, argc); \
         tc val = (tc)the_battery->bcall(); \
         return lil_alloc_##ta(val); \
@@ -47,7 +47,7 @@ _batt_func(percentage, getSOC, double, double)
 _batt_func(rate, getChangeRate, double, double)
 _batt_func(is_low, isLow, integer, lilint_t);
 
-void fnc_battery(lil_t lil, int argc, lil_value_t* argv) {
+lil_value_t fnc_battery(lil_t lil, int argc, lil_value_t* argv) {
     LIL_HASSUBCOMMANDS(lil, "battery", argc);
     LIL_SUBCOMMAND(lil, "voltage", argc, argv, fnc_battery_voltage);
     LIL_SUBCOMMAND(lil, "percentage", argc, argv, fnc_battery_percentage);
