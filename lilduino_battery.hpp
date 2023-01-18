@@ -16,7 +16,7 @@ as well as the LIL interpreter.
     battery rate
       Returns the rate at which the battery is changing (% per hour).
     
-    battery islow
+    battery is_low
       Returns true if the IC has flagged that the battery is low.
 
 */
@@ -45,14 +45,14 @@ SFE_MAX1704X* the_battery;
 _batt_func(voltage, getVoltage, double, double)
 _batt_func(percentage, getSOC, double, double)
 _batt_func(rate, getChangeRate, double, double)
-_batt_func(islow, isLow, integer, lilint_t);
+_batt_func(is_low, isLow, integer, lilint_t);
 
 void fnc_battery(lil_t lil, int argc, lil_value_t* argv) {
     LIL_HASSUBCOMMANDS(lil, "battery", argc);
     LIL_SUBCOMMAND(lil, "voltage", argc, argv, fnc_battery_voltage);
     LIL_SUBCOMMAND(lil, "percentage", argc, argv, fnc_battery_percentage);
     LIL_SUBCOMMAND(lil, "rate", argc, argv, fnc_battery_rate);
-    LIL_SUBCOMMAND(lil, "islow", argc, argv, fnc_battery_islow);
+    LIL_SUBCOMMAND(lil, "is_low", argc, argv, fnc_battery_is_low);
     LIL_ENDSUBCOMMANDS(lil, "battery", argv);
     return NULL;
 }
