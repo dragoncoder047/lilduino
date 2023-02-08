@@ -6,13 +6,13 @@ and an infrared LED.
 Depends on David Conran's ESP8266 infrared library, make sure you have that installed:
 https://github.com/crankyoldgit/IRremoteESP8266
 
-If you don't have an ESPxx uC, you could probably try another IR library,
-but then again you also need to have a uC that can run LIL anyway!
+If you don't have an ESP32 or ESP8266, you could probably try another IR library,
+but then again you also need to have a microcontroller that can run LIL anyway!
 
     set ir.rxpin <pin>
     set ir.txpin <pin>
-      Variables used to hold the pin numbers
-      the IR decoder library uses to receive and transmit.
+      Variables used to hold the pin numbers the IR decoder library uses
+      to receive and transmit.
 
     ir receive
       Tries to receive an infrared code from a demodulator connected to the rxpin.
@@ -35,10 +35,7 @@ but then again you also need to have a uC that can run LIL anyway!
 #include <IRremoteESP8266.h>
 #include <IRutils.h>
 
-extern "C" {
-    #include "lil.h"
-    #include "lil_helpers.h"
-}
+#include "lilduino.h"
 
 lil_value_t fnc_ir_send(lil_t lil, int argc, lil_value_t* argv) {
     LIL_FIXARITY(lil, "ir send", argc, 2);

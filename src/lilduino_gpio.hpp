@@ -40,10 +40,7 @@ the microcontroller.
 #include <Arduino.h>
 #include <stdlib.h>
 
-extern "C" {
-    #include "lil.h"
-    #include "lil_helpers.h"
-}
+#include "lilduino.h"
 
 lil_value_t fnc_gpio_pinmode(lil_t lil, int argc, lil_value_t* argv) {
     LIL_FIXARITY(lil, "gpio pinmode", argc, 2);

@@ -41,10 +41,7 @@ No real useful functionality yet and entirely untested (this may not even compil
 #include <WiFi.h>
 #include <stdlib.h>
 
-extern "C" {
-    #include "lil.h"
-    #include "lil_helpers.h"
-}
+#include "lilduino.h"
 
 lil_value_t fnc_wifi_mode(lil_t lil, int argc, lil_value_t* argv) {
     LIL_FIXARITY(lil, "wifi::mode", argc, 1);

@@ -31,10 +31,7 @@ Dependency: https://github.com/nickgammon/Regexp
 #include <Regexp.h>
 #include <stdlib.h>
 
-extern "C" {
-    #include "lil.h"
-    #include "lil_helpers.h"
-}
+#include "lilduino.h"
 
 lil_value_t fnc_re_match(lil_t lil, int argc, lil_value_t* argv) {
     LIL_CHECKARGS(lil, "regmatch", argc, 2, MAXCAPTURES + 2);

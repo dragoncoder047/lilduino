@@ -28,10 +28,7 @@ as well as the LIL interpreter.
 #include <Wire.h>
 #include <SparkFun_MAX1704x_Fuel_Gauge_Arduino_Library.h>
 
-extern "C" {
-    #include "lil.h"
-    #include "lil_helpers.h"
-}
+#include "lilduino.h"
 
 SFE_MAX1704X* the_battery;
 

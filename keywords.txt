@@ -1,0 +1,76 @@
+# LIL functions
+lil_new	KEYWORD2
+lil_free	KEYWORD2
+lil_callback	KEYWORD2
+lil_parse	KEYWORD2
+lil_parse_value	KEYWORD2
+lil_call	KEYWORD2
+lil_break_run	KEYWORD2
+lil_set_error	KEYWORD2
+lil_error	KEYWORD2
+lil_alloc_string	KEYWORD2
+lil_alloc_double	KEYWORD2
+lil_alloc_integer	KEYWORD2
+lil_to_string	KEYWORD2
+lil_to_double	KEYWORD2
+lil_to_integer	KEYWORD2
+lil_to_boolean	KEYWORD2
+lil_clone_value	KEYWORD2
+lil_append_char	KEYWORD2
+lil_append_string	KEYWORD2
+lil_append_val	KEYWORD2
+lil_alloc_list	KEYWORD2
+lil_free_list	KEYWORD2
+lil_list_append	KEYWORD2
+lil_list_size	KEYWORD2
+lil_list_get	KEYWORD2
+lil_list_to_value	KEYWORD2
+lil_subst_to_list	KEYWORD2
+lil_subst_to_value	KEYWORD2
+lil_register	KEYWORD2
+lil_set_var	KEYWORD2
+lil_get_var	KEYWORD2
+lil_get_var_or	KEYWORD2
+lil_push_env	KEYWORD2
+lil_pop_env	KEYWORD2
+lil_eval_expr	KEYWORD2
+lil_unused_name	KEYWORD2
+lil_set_data	KEYWORD2
+lil_get_data	KEYWORD2
+lil_embedded	KEYWORD2
+lil_freemem	KEYWORD2
+lil_write	KEYWORD2
+
+# LIL constants
+LIL_SETVAR_LOCAL	KEYWORD1
+LIL_SETVAR_LOCAL_NEW	KEYWORD1
+LIL_SETVAR_LOCAL_ONLY	KEYWORD1
+LIL_SETVAR_GLOBAL	KEYWORD1
+LIL_CALLBACK_EXIT	KEYWORD1
+LIL_CALLBACK_WRITE	KEYWORD1
+LIL_CALLBACK_READ	KEYWORD1
+LIL_CALLBACK_SOURCE	KEYWORD1
+LIL_CALLBACK_STORE	KEYWORD1
+LIL_CALLBACK_ERROR	KEYWORD1
+LIL_CALLBACK_SETVAR	KEYWORD1
+LIL_CALLBACK_GETVAR	KEYWORD1
+LIL_CALLBACK_EMBEDDEDFILTER	KEYWORD1
+
+# My added things
+LIL_FAILED	KEYWORD2
+LIL_FIXARITY	KEYWORD2
+LIL_CHECKARGS	KEYWORD2
+LIL_NOARGS	KEYWORD2
+LIL_HASSUBCOMMANDS	KEYWORD2
+LIL_SUBCOMMAND	KEYWORD2
+LIL_ENDSUBCOMMANDS	KEYWORD2
+
+# LILduino library functions
+lilduino_basic_init	KEYWORD2
+lilduino_battery_init	KEYWORD2
+lilduino_clock_init	KEYWORD2
+lilduino_gpio_init	KEYWORD2
+lilduino_io_init	KEYWORD2
+lilduino_ir_init	KEYWORD2
+lilduino_regexp_init	KEYWORD2
+lilduino_wifi_init	KEYWORD2

@@ -29,10 +29,7 @@ up receiving a ~ when nothing is expected causes a "keyboard interrupt".
 #include <Arduino.h>
 #include <SD.h>
 
-extern "C" {
-    #include "lil.h"
-    #include "lil_helpers.h"
-}
+#include "lilduino.h"
 
 void output_cb(lil_t lil, const char* string) {
     Serial.printf("%s", string);

@@ -4,16 +4,14 @@
 #include "SparkFun_MAX1704x_Fuel_Gauge_Arduino_Library.h"
 #include <stdlib.h>
 
-extern "C" {
-    #include "lil.h"
-    #include "lil_helpers.h"
-}
-
+#include "lilduino.h"
 #include "lilduino_io.hpp"
 #include "lilduino_gpio.hpp"
 #include "lilduino_regexp.hpp"
 #include "lilduino_ir.hpp"
 #include "lilduino_battery.hpp"
+#include "lilduino_basic.hpp"
+
 #include "misc.hpp"
 
 void lil_run(lil_t lil, char* source) {
@@ -25,6 +23,10 @@ lil_t lil;
 SFE_MAX1704X battery(SFE_MAX17048);
 
 int sd_card_failed_blink[3] = {0x000040, 0x400000, 0x000000};
+
+#ifndef yield
+#define yield()
+#endif
 
 void fatal_status_loop(int d, size_t num, int colors[]) {
     while (1) {
@@ -82,6 +84,7 @@ void setup() {
     // Set up LIL
     lil = lil_new();
     lilduino_io_init(lil);
+    lilduino_basic_init(lil);
     lilduino_misc_init(lil);
     lilduino_gpio_init(lil);
     lilduino_regexp_init(lil);

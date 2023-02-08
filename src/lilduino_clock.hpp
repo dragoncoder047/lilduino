@@ -23,10 +23,7 @@ Implements something like the Tcl "clock" command.
 #include <Arduino.h>
 #include "time.h"
 
-extern "C" {
-    #include "lil.h"
-    #include "lil_helpers.h"
-}
+#include "lilduino.h"
 
 lil_value_t fnc_clock_milliseconds(lil_t lil, int argc, lil_value_t* args) {
     LIL_NOARGS(lil, "clock milliseconds", argc);

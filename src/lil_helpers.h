@@ -3,7 +3,7 @@
 
 #define LIL_FAILED(lil, printf_args...) do { char* temp_buf_; asprintf(&temp_buf_, printf_args); lil_set_error(lil, temp_buf_); free(temp_buf_); } while (0)
 
-#define streq(s1, s2) (strcmp(s1, s2) == 0)
+#define streq(s1, s2) (!strcmp(s1, s2))
 
 #define LIL_FIXARITY(lil, cmd, argc, numargs) do { if (argc != numargs) { LIL_FAILED(lil, "Expected %i args to " cmd ", got %i", numargs, argc); return NULL; } } while (0)
 
