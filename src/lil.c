@@ -2122,6 +2122,8 @@ double lil_to_double(lil_value_t val)
 
 int lil_to_boolean(lil_value_t val)
 {
+    double d = lil_to_double(val);
+    if (val->t != LIL_TYPE_STRING) return d != 0.;
     const char* s = lil_to_string(val);
     size_t i, dots = 0;
     if (!s[0]) {return 0;}
