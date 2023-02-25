@@ -1,7 +1,6 @@
 /*
 
-Some random functions I thought would be useful. They rely heavily on
-the hardware on my board (an ESP32); don't expect them all to work on your board.
+Some basic arduino functions that don't fit in their own library.
 
     delay [n] [unit]
       Wait for a period of time
