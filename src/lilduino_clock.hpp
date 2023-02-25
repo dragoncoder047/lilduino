@@ -5,7 +5,7 @@ Implements something like the Tcl "clock" command.
     clock [milliseconds|ms]
     clock [microseconds|us]
     clock [seconds|secs]
-      Returns millis(), micros(), or 1000*millis(), respectively.
+      Returns millis(), micros(), or millis()/1000, respectively.
       Note that the "epoch" (the zero-time moment) is whenever your
       arduino last restarted, not Jan 1, 1970 00:00 UTC. These values
       are only sutable for timing the duration of something.
@@ -37,7 +37,7 @@ lil_value_t fnc_clock_microseconds(lil_t lil, int argc, lil_value_t* args) {
 
 lil_value_t fnc_clock_seconds(lil_t lil, int argc, lil_value_t* args) {
     LIL_NOARGS(lil, "clock seconds", argc);
-    return lil_alloc_integer((lilint_t)(1000 * millis()));
+    return lil_alloc_integer((lilint_t)(millis()/1000));
 }
 
 lil_value_t fnc_clock_format(lil_t lil, int argc, lil_value_t* argv) {
